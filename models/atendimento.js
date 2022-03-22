@@ -31,7 +31,7 @@ class Atendimento {
                     res.status(400).json(error);
                 }
                 else {
-                    res.status(201).json(result)
+                    res.status(201).json(`O atendimento de ${atendimento.servico} foi cadastrado para o cliente ${atendimento.cliente}, para a data ${atendimento.data}`)
                 }
             })
         }
@@ -71,21 +71,18 @@ class Atendimento {
                 res.status(400).json(err)
             }
             else{
-                res.status(200).json(result)
+                res.status(200).json({...values, id})
             }
         })
     }
-    delete(id, values, res){
-        if (values.data){
-            values.data = moment(values.data, 'DD-MM-YYYY').format('YYYY-MM-DD HH:MM:SS');
-        }
-        const sql = 'DELETE atendimentos WHERE id=?'
-        connection.query(sql,[values,id], (err, result) => {
+    delete(id, res){
+        const sql = 'DELETE FROM atendimentos WHERE id=?'
+        connection.query(sql,id, (err, result) => {
             if (err) {
                 res.status(400).json(err)
             }
             else{
-                res.status(200).json(result)
+                res.status(200).json(`Id removido: ${id}`)
             }
         })
     }

@@ -22,7 +22,6 @@ module.exports = app =>{
     })
     app.delete('/atendimentos/:id', (req, res) => {
         const id = parseInt(req.params.id)
-        const values = req.body
-        Atendimento.update(id, values, res)
+        Atendimento.delete(id, res)
     })
 }
