@@ -1,6 +1,10 @@
 const { createSecretKey } = require('crypto');
-const moment = require('moment')
+const moment = require('moment');
+const axios = require ('axios')
 const connection = require('../infrastructure/connections');
+const atendimentos = require('../controllers/atendimentos');
+
+
 class Atendimento {
     adiciona(atendimento, res){
         const dataCriacao = moment().format('YYYY-MM-DD HH:MM:SS');
@@ -51,12 +55,15 @@ class Atendimento {
     findById(id, res){
         const sql = `SELECT * FROM atendimentos WHERE id=${id}`
         
-        connection.query(sql, (err, result) => {
+        connection.query(sql, async (err, result) => {
             const a = result[0];
+            const cpf = a.cliente
             if (err) {
                 res.status(400).json(err)
             }
             else{
+                const {data} = await axios.get(`http://localhost:8082/${cpf}`)
+                a.cliente = data
                 res.status(200).json(a)
             }
         })
