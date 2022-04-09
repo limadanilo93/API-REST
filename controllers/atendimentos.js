@@ -3,7 +3,9 @@ const Atendimento = require('../models/atendimento')
 module.exports = app =>{
     app.get('/atendimentos', (req, res) => {
         
-        Atendimento.lista(res)
+        Atendimento.lista()
+            .then(results => res.json(results))
+            .catch(err => res.status(400).json(err))
     });
     app.get('/atendimentos/:id', (req, res) => {
         console.log(req.params.id)
@@ -12,7 +14,14 @@ module.exports = app =>{
     })
     app.post('/atendimentos', (req, res) => {
         const atendimento = req.body
-        Atendimento.adiciona(atendimento, res)
+        Atendimento.adiciona(atendimento)
+            .then((atendimentoCadastro) => {
+                res.status(201).json(atendimentoCadastro)
+
+            })
+            .catch((err) => {
+                res.status(400).json(err)
+            })
         
     })
     app.patch('/atendimentos/:id', (req, res) => {
